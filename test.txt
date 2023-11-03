@@ -1,5 +1,1 @@
-word = " this is an \n \ inline string"  hehe so the rest are garbage
-continues on another line
-final statement(a, b)
-rulebase from 10 to 20 end
-Continue string asd = "ehh" da
+a = "\n"
