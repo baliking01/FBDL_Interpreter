@@ -1,1 +1,10 @@
-a = "\n"
+rulebase "speed_bck_lft"
+  rule
+"low" when "pitch" is "fwd"
+  end
+end
+
+universe "yaw"
+      "low" -1000 0
+       "high" 1000 1
+end
