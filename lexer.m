@@ -175,7 +175,7 @@ function [ERROR_FLAG, ERROR, token_stream] = lexer(input_text)
       token.value = str2double(substr(lexer.content, lexer.token_begins, lexer.cursor - lexer.token_begins));
       token_stream(1, length(token_stream) + 1) = token;
 
-    % Read character literal
+    % Check for character literal
     elseif lexer.content(lexer.cursor) == "'"
       token = registerToken("LITERAL_CHARACTER", "");
       lexer.token_begins = lexer.cursor;
@@ -206,7 +206,7 @@ function [ERROR_FLAG, ERROR, token_stream] = lexer(input_text)
       end
 
 
-      % Check if character token is closed by the other ' symbol
+      % Test if character token is closed by the other ' symbol
       lexer.cursor++; % A bounds check is required after moving the cursor
       if lexer.cursor <= lexer.content_len && lexer.content(lexer.cursor) == "'"
 	      token_stream(1, length(token_stream) + 1) = token;
@@ -226,5 +226,5 @@ function [ERROR_FLAG, ERROR, token_stream] = lexer(input_text)
 
   end % End of main loop
 
-  return % return the whatever is in token_stream
+  return % return whatever is in token_stream
 end
