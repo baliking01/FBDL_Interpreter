@@ -1,11 +1,11 @@
 % Parser return value follows C sytle convention: 0 on success, 1 on failure
 function retval = parser(input_text)
   % TODO: Fix file path config
-  addpath("F:/GitRepos/FBDL_Interpreter/lexer")
-  addpath("F:/GitRepos/FBDL_Interpreter/lexer/utils")
+  % addpath("F:/GitRepos/FBDL_Interpreter/lexer")
+  % addpath("F:/GitRepos/FBDL_Interpreter/lexer/utils")
 
   % TODO: Allow either file path or string as parameter
-  content = fileread("../test.txt");
+  content = fileread("test.txt");
 
   keywords = {
     "dominates", "description", "end", "from", "is",...
