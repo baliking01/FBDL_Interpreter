@@ -1,5 +1,6 @@
 % Parser return value follows C sytle convention: 0 on success, 1 on failure
 function retval = parser(input_text)
+  retval = 0;
   content = input_text;
   keywords = {
     "universe", "rulebase", "end", "description", "rule",...
@@ -32,7 +33,7 @@ function retval = parser(input_text)
   lexer.terminals = terminals;
   lexer._error = _error;
 
-  retval = 0;
+  % behavior = parseBehavior(lexer);
 
   while true
     [lexer, token] = getNextToken(lexer);
@@ -43,8 +44,9 @@ function retval = parser(input_text)
       fprintf(2, "Syntax error: %s\nAt line %d, column: %d %s\n", lexer._error.type, lexer._error.line, lexer._error.column, lexer._error.msg);
       retval = 1;
       return
-    endif
+    end
 
     token
   end
+
 end
