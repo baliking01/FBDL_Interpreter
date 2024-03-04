@@ -1,29 +1,5 @@
-## Copyright (C) 2023 baliking
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-## -*- texinfo -*-
-## @deftypefn {} {@var{retval} =} lexIdentifier (@var{input1}, @var{input2})
-##
-## @seealso{}
-## @end deftypefn
-
-## Author: baliking <baliking@DESKTOP-UT7D7AK>
-## Created: 2023-12-10
-
 function [lexer, token] = lexIdentifier (lexer)
-  token = registerToken("IDENTIFIER", "");
+  token = emitToken("identifier", "");
   lexer.token_begins = lexer.cursor;
 
   while lexer.cursor <= lexer.content_len && isIdent(lexer.content(lexer.cursor))
@@ -33,6 +9,6 @@ function [lexer, token] = lexIdentifier (lexer)
   token.value = substr(lexer.content, lexer.token_begins, lexer.cursor - lexer.token_begins);
 
   if any(strcmp(lexer.keywords, token.value))
-    token.type = "KEYWORD";
+    token.type = "keyword";
   end
-endfunction
+end

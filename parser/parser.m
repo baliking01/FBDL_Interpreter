@@ -1,51 +1,23 @@
 % Parser return value follows C sytle convention: 0 on success, 1 on failure
 function retval = parser(input_text)
-  % TODO: Fix file path config
-  % addpath("F:/GitRepos/FBDL_Interpreter/lexer")
-  % addpath("F:/GitRepos/FBDL_Interpreter/lexer/utils")
-
-  % TODO: Allow either file path or string as parameter
-  content = fileread("test.txt");
-
+  content = input_text;
   keywords = {
-    "dominates", "description", "end", "from", "is",...
-    "rule", "rulebase", "to", "universe", "when"
+    "universe", "rulebase", "end", "description", "rule",...
+    "when", "and", "is", "dominates", "init",  "use"
   };
 
   terminals = {
-    "(", "LPAREN";
-    ")", "RPAREN";
-    "[", "LBRACKET";
-    "]", "RBRACKET";
-    "{", "LCURLY";
-    "}", "RCURLY";
-    "<", "LANGLE";
-    ">", "RANGLE";
-    "=", "ASSIGNMENT";
-    ",", "COMMA";
-    ".", "DOT";
-    ":", "COLON";
-    ";", "SEMICOLON";
-    "#", "HASH";
-    "&", "AMPER";
-    "+", "ADD";
-    "-", "SUB";
-    "*", "MULT";
-    "/", "DIV";
-    "%", "MOD";
+    "(", "lparen";
+    ")", "rparen";
+    ",", "comma";
+    "#", "hash";
+    "-", "minus";
   };
 
-  escape_characters = {
-    'n', "\n";
-    'v', "\v";
-    't', "\t";
-    'a', "\a";
-    '"', '"';
-    '\', '\';
-  };
-
-  ERROR = struct();
-  ERROR_FLAG = false;
+  _error = struct(
+    "flag", false,
+    "msg", ""
+  );
 
   lexer = struct(
     "content", content,
@@ -58,9 +30,7 @@ function retval = parser(input_text)
 
   lexer.keywords = keywords;
   lexer.terminals = terminals;
-  lexer.escape_characters = escape_characters;
-  lexer.ERROR = ERROR;
-  lexer.ERROR_FLAG = ERROR_FLAG;
+  lexer._error = _error;
 
   retval = 0;
 
@@ -69,8 +39,8 @@ function retval = parser(input_text)
 
     if strcmp(token.type, "EOF")
       return
-    elseif lexer.ERROR_FLAG
-      fprintf(2, "Error: %s\nAt line %d, column: %d %s\n", lexer.ERROR.TYPE, lexer.ERROR.LINE, lexer.ERROR.COLUMN, lexer.ERROR.MSG);
+    elseif lexer._error.flag
+      fprintf(2, "Syntax error: %s\nAt line %d, column: %d %s\n", lexer._error.type, lexer._error.line, lexer._error.column, lexer._error.msg);
       retval = 1;
       return
     endif

@@ -1,38 +1,97 @@
 function [lexer, token] = getNextToken(lexer)
-  % Trim all control characters including whitespaces, up to 32 in ASCII
   lexer = trim(lexer);
 
-  % See if EOF is reached
   if lexer.cursor > lexer.content_len
-    token = registerToken("EOF", "");
+    token = emitToken("EOF", "");
     return;
   end
 
-  % Check for any of the following valid tokens
   if isIdentStart(lexer.content(lexer.cursor))
     [lexer, token] = lexIdentifier(lexer);
 
-  % Check for terminals
   elseif any(strcmp(lexer.terminals(:, 1), lexer.content(lexer.cursor)))
     [lexer, token] = lexTerminal(lexer);
 
-  % Check for string literals
   elseif lexer.content(lexer.cursor) == '"'
-    [lexer, token] = lexLiteralString(lexer);
+    [lexer, token] = lexLiteral(lexer);
 
-  % Check for number literals
   elseif isNumeric(lexer.content(lexer.cursor))
-    [lexer, token] = lexLiteralNumber(lexer);
+    [lexer, token] = lexNumber(lexer);
 
-  % Check for character literal
-  elseif lexer.content(lexer.cursor) == "'"
-    [lexer, token] = lexLiteralCharacter(lexer);
-
-  % Error checking
-  % Anything that cannot be tokenized is reported as an error
   else
-    token = registerToken("UNKNOWN TOKEN", "");
-    lexer.ERROR_FLAG = true;
-    lexer.ERROR = registerError(lexer.line, lexer.cursor - lexer.beginning_of_line, "INVALID TOKEN", "Cannot parse input!");
+    token = emitToken("UNKNOWN TOKEN", "");
+    lexer._error = emitError(lexer.line, lexer.cursor - lexer.beginning_of_line, "Syntax error", "Cannot parse input!");
   end
 end
+
+%!shared lexer
+%! keywords = {
+%!  "dominates", "description", "end", "from", "is",...
+%!  "rule", "rulebase", "to", "universe", "when"};
+%!
+%! terminals = {
+%!  "(", "LPAREN";
+%!  ")", "RPAREN";
+%!  ",", "COMMA";
+%!  "#", "HASH";
+%!  "-", "MINUS"};
+%!
+%! _error = struct(
+%!    "flag", false,
+%!    "msg", "");
+%!
+%! lexer = struct(
+%!    "content", "",
+%!    "content_len", 0,
+%!    "cursor", 1,
+%!    "line", 1,
+%!    "beginning_of_line", 1,
+%!    "token_begins", 1);
+%!
+%!  lexer.keywords = keywords;
+%!  lexer.terminals = terminals;
+%!  lexer._error= _error;
+
+%!
+%!test "Empty input";
+%! content = "";
+%! lexer.content = content;
+%! lexer.content_len = length(content);
+%! [lex, token] = getNextToken(lexer);
+%! assert(strcmp(token.type, "EOF"));
+
+%!
+%!test "Whitespaces only";
+%! content = "    ";
+%! lexer.content = content;
+%! lexer.content_len = length(content);
+%! [lex, token] = getNextToken(lexer);
+%! assert(strcmp(token.type, "EOF"));
+
+%!
+%!test "Leading whitespaces";
+%! content = "    var";
+%! lexer.content = content;
+%! lexer.content_len = length(content);
+%! [lex, token] = getNextToken(lexer);
+%! assert(strcmp(token.type, "IDENTIFIER"));
+%! assert(strcmp(token.value, "var"));
+
+%!
+%!test "Trailing whitespaces";
+%! content = "var     ";
+%! lexer.content = content;
+%! lexer.content_len = length(content);
+%! [lex, token] = getNextToken(lexer);
+%! assert(strcmp(token.type, "IDENTIFIER"));
+%! assert(strcmp(token.value, "var"));
+
+%!
+%!test "Mixed whitespaces";
+%! content = "    var     ";
+%! lexer.content = content;
+%! lexer.content_len = length(content);
+%! [lex, token] = getNextToken(lexer);
+%! assert(strcmp(token.type, "IDENTIFIER"));
+%! assert(strcmp(token.value, "var"));
+
