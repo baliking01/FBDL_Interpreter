@@ -19,8 +19,7 @@ function [lexer, token] = getNextToken(lexer)
     [lexer, token] = lexNumber(lexer);
 
   else
-    token = emitToken("UNKNOWN TOKEN", "");
-    lexer._error = emitError(lexer.line, lexer.cursor - lexer.beginning_of_line, "Syntax error", "Cannot parse input!");
+    raiseError(lexer, "Syntax error", "Cannot parse input: unrecognized token!");
   end
 end
 

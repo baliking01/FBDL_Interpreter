@@ -14,8 +14,7 @@ function [lexer, token] = lexLiteral(lexer)
 
   % See if EOF is reached without finding closing " symbol
   if lexer.cursor > lexer.content_len
-    lexer._error = emitError(lexer.line, lexer.cursor - lexer.beginning_of_line, "Invalid string literal", 'Missing " symbol at the end of string!');
-    return;
+    raiseError(lexer, "Syntax error", "Invalid string literal: missing \" symbol at the end of string!");
   end
 
   % Store string literal

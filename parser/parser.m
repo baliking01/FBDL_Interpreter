@@ -15,11 +15,6 @@ function retval = parser(input_text)
     "-", "minus";
   };
 
-  _error = struct(
-    "flag", false,
-    "msg", ""
-  );
-
   lexer = struct(
     "content", content,
     "content_len", length(content),
@@ -31,22 +26,17 @@ function retval = parser(input_text)
 
   lexer.keywords = keywords;
   lexer.terminals = terminals;
-  lexer._error = _error;
 
-  % behavior = parseBehavior(lexer);
+  behavior = parseBehavior(lexer);
+  behavior
 
-  while true
-    [lexer, token] = getNextToken(lexer);
-
-    if strcmp(token.type, "EOF")
-      return
-    elseif lexer._error.flag
-      fprintf(2, "Syntax error: %s\nAt line %d, column: %d %s\n", lexer._error.type, lexer._error.line, lexer._error.column, lexer._error.msg);
-      retval = 1;
-      return
-    end
-
-    token
-  end
-
+  %while true
+  %  [lexer, token] = getNextToken(lexer);
+  %
+  %  if strcmp(token.type, "EOF")
+  %    return
+  %  end
+  %
+  %  token
+  %end
 end
