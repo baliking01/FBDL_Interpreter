@@ -15,7 +15,11 @@ function behavior = parseBehavior(lexer)
         end
         behavior.universes.(universe.name) = universe.value;
       elseif (strcmp(token.value, "rulebase"))
-        %rulebase = parseRuleBase(lexer)
+        [lexer, rulebase] = parseRulebase(lexer);
+        if (any(strcmp(behavior.rulebases, rulebase.name)))
+          raiseError(lexer, "Parser error", "Rulebase already defined!");
+        end
+        behavior.rulebases.(rulebase.name) = rulebase.value;
       end
 
     elseif (!strcmp(token.type, "EOF"))

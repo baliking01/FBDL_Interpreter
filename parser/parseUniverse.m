@@ -26,22 +26,25 @@ function [lexer, universe] = parseUniverse(lexer)
     while (strcmp(token.type, "literal"))
       symbol.name = token.value;
 
-      % TODO: Move atof/atod conversion here and implement error checking for MAX(double)
       [lexer, token] = getNextToken(lexer);
       if (strcmp(token.type, "number"))
-        symbol.position = token.value;
+        symbol.position = str2double(token.value);
+        if (isnan(symbol.position))
+          raiseError(lexer, "Parse error", "Invalid 'position' argument in universe definition! Number exceeds maximum value!")
+        end
       else
-        raiseError(lexer, "Parse error", "Invalid 'position' argument in universe definition!");
+        raiseError(lexer, "Parse error", "Invalid 'position' argument in universe definition! Not a number!");
       end
       [lexer, token] = getNextToken(lexer);
       if (strcmp(token.type, "number"))
         symbol.value = token.value;
+        if (isnan(symbol.value))
+          raiseError(lexer, "Parse error", "Invalid 'value' argument in universe definition! Number exceeds maximum value!")
+        end
       else
         raiseError(lexer, "Parse error", "Invalid 'value' argument in universe definition!");
       end
 
-      %universe
-      %symbol
       universe.value.(symbol.name).position = symbol.position;
       universe.value.(symbol.name).value = symbol.value;
 
@@ -55,7 +58,7 @@ function [lexer, universe] = parseUniverse(lexer)
     end
 
   else
-    raiseError(lexer, "Parse error", "The name of the universe is missing");
+    raiseError(lexer, "Parse error", "Invalid 'name' argument in universe definition!")
   end
 
 end

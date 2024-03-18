@@ -12,7 +12,6 @@ function retval = parser(input_text)
     ")", "rparen";
     ",", "comma";
     "#", "hash";
-    "-", "minus";
   };
 
   lexer = struct(
@@ -34,9 +33,8 @@ function retval = parser(input_text)
   %  [lexer, token] = getNextToken(lexer);
   %
   %  if strcmp(token.type, "EOF")
-  %    return
+  %   return
   %  end
-  %
-  %  token
+
   %end
 end

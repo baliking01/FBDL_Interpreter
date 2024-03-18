@@ -15,13 +15,15 @@ function [lexer, token] = getNextToken(lexer)
   elseif lexer.content(lexer.cursor) == '"'
     [lexer, token] = lexLiteral(lexer);
 
-  elseif isNumeric(lexer.content(lexer.cursor))
+  elseif isNumeric(lexer.content(lexer.cursor)) || lexer.content(lexer.cursor) == "-"
     [lexer, token] = lexNumber(lexer);
 
   else
     raiseError(lexer, "Syntax error", "Cannot parse input: unrecognized token!");
   end
 end
+
+
 
 %!shared lexer
 %! keywords = {
@@ -35,10 +37,6 @@ end
 %!  "#", "HASH";
 %!  "-", "MINUS"};
 %!
-%! _error = struct(
-%!    "flag", false,
-%!    "msg", "");
-%!
 %! lexer = struct(
 %!    "content", "",
 %!    "content_len", 0,
@@ -49,7 +47,6 @@ end
 %!
 %!  lexer.keywords = keywords;
 %!  lexer.terminals = terminals;
-%!  lexer._error= _error;
 
 %!
 %!test "Empty input";
