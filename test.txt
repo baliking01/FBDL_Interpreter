@@ -76,7 +76,7 @@ end
 rulebase "rest_demand"
 description "The agent requires rest if it is tired."
 	rule "high" when "tiredness" is "high" end
-    rule "low" when "tiredness" is "low" end
+  rule "low" when "tiredness" is "low" end
 	rule "high" when "rest_demand" is "high" and "tiredness" is "small" end
 	rule "low" when "rest_demand" is "low" and "tiredness" is "middle" end
 end

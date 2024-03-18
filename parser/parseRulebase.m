@@ -1,7 +1,7 @@
 function [lexer, rulebase] = parseRulebase(lexer)
   rulebase = struct(
     "name", "",
-    "rules", ""
+    "rules", "",
     "description", ""
   );
 
@@ -22,15 +22,21 @@ function [lexer, rulebase] = parseRulebase(lexer)
       end
     end
 
-    [lexer, rules] = parseRules(lexer);
+    rules = [];
+    while (strcmp(token.type, "keyword") && strcmp(token.value, "rule"))
+      [lexer, rule] = parseRule(lexer);
+      rules = [rules rule];
+      [lexer, token] = getNextToken(lexer);
+    end
     rulebase.rules = rules;
-
 
     if (strcmp(token.type, "keyword") && strcmp(token.value, "end"))
       return
     else
       raiseError(lexer, "Parse error", "Missing 'end' keyword after rulebase definition!");
     end
+
+    % TODO: Add list of rules after rulebase definition
 
   else
     raiseError(lexer, "Parse error", "Invalid 'name' argument in rulebase definition!")

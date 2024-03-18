@@ -5,7 +5,6 @@ function behavior = parseBehavior(lexer)
   );
 
   [lexer, token] = getNextToken(lexer);
-  token
   while (!strcmp(token.type, "EOF"))
     if (strcmp(token.type, "keyword"))
       if (strcmp(token.value, "universe"))
@@ -13,17 +12,19 @@ function behavior = parseBehavior(lexer)
         if (any(strcmp(behavior.universes, universe.name)))
           raiseError(lexer, "Parser error", "Universe already defined!");
         end
-        behavior.universes.(universe.name) = universe.value;
+        behavior.universes.(universe.name) = universe;
       elseif (strcmp(token.value, "rulebase"))
         [lexer, rulebase] = parseRulebase(lexer);
         if (any(strcmp(behavior.rulebases, rulebase.name)))
           raiseError(lexer, "Parser error", "Rulebase already defined!");
         end
-        behavior.rulebases.(rulebase.name) = rulebase.value;
+        behavior.rulebases.(rulebase.name) = rulebase;
+
+      else
+        raiseError(lexer, "Parser error", "Keyword outside of universe or rulebase definition!");
       end
 
     elseif (!strcmp(token.type, "EOF"))
-      token
       raiseError(lexer, "Parser error", "Missing universe and or rulebase!");
     end
 
