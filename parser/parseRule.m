@@ -30,7 +30,6 @@ function [lexer, rule] = parseRule(lexer)
 
     % Read predicates
     [lexer, token] = getNextToken(lexer);
-    token
     if (strcmp(token.type, "keyword") && strcmp(token.value, "when"))
       while (!strcmp(token.value, "end"))
         antecedent = "";

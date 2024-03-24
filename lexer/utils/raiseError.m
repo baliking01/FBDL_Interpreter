@@ -1,5 +1,5 @@
 function raiseError (lexer, type, msg)
-  while (lexer.content(lexer.cursor) != "\n" && lexer.content(lexer.cursor) < lexer.content_len)
+  while (lexer.cursor <= lexer.content_len && lexer.content(lexer.cursor) != "\n")
     lexer.cursor++;
   end
 

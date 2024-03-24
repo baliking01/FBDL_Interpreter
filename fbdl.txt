@@ -1,1 +1,98 @@
-rulebase from 10 to 20 end
+universe "has_noise"
+description "Has the target noise?"
+    "false" 0 0
+    "true" 1 1
+end
+
+universe "distance"
+description "The distance from the target."
+    "close" 0 0
+    "middle" 0.1 1
+    "far" 1 1
+end
+
+universe "rest_distance"
+description "The distance from the rest position."
+    "close" 0 0
+    "middle" 0.1 1
+    "far" 1 1
+end
+
+universe "tiredness"
+description "The measure of tiredness."
+    "low" 0 0
+    "small" 0.3 0.5
+	"middle" 0.7 0.5
+    "high" 1 1
+end
+
+universe "rest_demand"
+description "The measure of demand for the rest."
+    "low" 0 0
+    "small" 0.3 0
+	"middle" 0.7 1
+    "high" 1 1
+end
+
+universe "speed"
+description "The speed of the agent."
+    "forward" 1 1
+    "stop" 0 0
+    "backward" -1 -1
+end
+
+universe "approach"
+description "The speed how the agent approaching the target."
+    "low" 0 0
+    "high" 1 1
+end
+
+universe "go_to_rest"
+description "The speed how the agent go to the rest position."
+    "low" 0 0
+    "high" -1 -1
+end
+
+universe "interest"
+description "The measure how the agent interested about the target."
+    "low" 0 0
+    "small" 0.3 0
+	"middle" 0.7 1
+    "high" 1 1
+end
+
+rulebase "interest"
+description "The agent is interested when the target has noise."
+    rule "low" when "distance" is "close" end
+    rule "high" when "has_noise" is "true" end
+    rule "high" when "interest" is "high" end
+    rule "low" end
+end
+
+rulebase "rest_demand"
+description "The agent requires rest if it is tired."
+	rule "high" when "tiredness" is "high" end
+  rule "low" when "tiredness" is "low" end
+	rule "high" when "rest_demand" is "high" and "tiredness" is "small" end
+	rule "low" when "rest_demand" is "low" and "tiredness" is "middle" end
+end
+
+rulebase "approach"
+description "Approach when there is a closer interesting target."
+    rule "high" when "distance" is "far" end
+    rule "low" end
+end
+
+rulebase "go_to_rest"
+description "Go to rest position when the target is tired."
+    rule "high" when "rest_distance" is "far" end
+    rule "low" end
+end
+
+rulebase "speed"
+description "The speed fusioned from approach and go_to_rest values."
+    rule use "go_to_rest" when "rest_demand" is "high" end
+    rule use "approach" when "interest" is "high" end
+    rule "stop" end
+end
+

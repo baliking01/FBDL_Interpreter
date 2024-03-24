@@ -1,4 +1,5 @@
 function [lexer, token] = lexLiteral(lexer)
+  % String tokens are empty by default
   token = emitToken("literal", "");
   lexer.cursor++; % Skip " symbol
   lexer.token_begins = lexer.cursor;
@@ -14,10 +15,12 @@ function [lexer, token] = lexLiteral(lexer)
 
   % See if EOF is reached without finding closing " symbol
   if lexer.cursor > lexer.content_len
-    raiseError(lexer, "Syntax error", "Invalid string literal: missing \" symbol at the end of string!");
+    raiseError(lexer, "Syntax error", "Unterminated string literal: missing \" symbol at the end of string!");
   end
 
-  % Store string literal
-  token.value = substr(lexer.content, lexer.token_begins, lexer.cursor - lexer.token_begins);
+  % Store string literal if not empty string
+  if lexer.cursor - lexer.token_begins != 0
+    token.value = substr(lexer.content, lexer.token_begins, lexer.cursor - lexer.token_begins);
+  end
   lexer.cursor++;
 end

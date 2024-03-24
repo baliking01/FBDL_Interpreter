@@ -1,4 +1,4 @@
-% Interpreter main entry point
+% Interpreter main entry point, user callable function
 % "input" is either a string or a path to a file containing content written in FBDL
 % This can be specified with the "type" parameter, where "s" indicates a string and "f" a file.
 function retval = main(input, type)
