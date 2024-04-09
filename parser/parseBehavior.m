@@ -1,7 +1,7 @@
 function behavior = parseBehavior(lexer)
   behavior = struct(
     "universes", "",
-    "rulebases", ""
+    "rulebases", []
   );
 
   [lexer, token] = getNextToken(lexer);
@@ -12,13 +12,15 @@ function behavior = parseBehavior(lexer)
         if (any(strcmp(behavior.universes, universe.name)))
           raiseError(lexer, "Parser error", "Universe already defined!");
         end
+        %behavior.universes = [behavior.universes universe];
         behavior.universes.(universe.name) = universe;
+
       elseif (strcmp(token.value, "rulebase"))
         [lexer, rulebase] = parseRulebase(lexer);
         if (any(strcmp(behavior.rulebases, rulebase.name)))
           raiseError(lexer, "Parser error", "Rulebase already defined!");
         end
-        behavior.rulebases.(rulebase.name) = rulebase;
+        behavior.rulebases = [behavior.rulebases rulebase];
 
       else
         raiseError(lexer, "Parser error", "Keyword outside of universe or rulebase definition!");

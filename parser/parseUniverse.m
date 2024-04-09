@@ -1,7 +1,7 @@
 function [lexer, universe] = parseUniverse(lexer)
   universe = struct(
     "name", "",
-    "value", "",
+    "values", "",
     "description", ""
   );
 
@@ -45,8 +45,10 @@ function [lexer, universe] = parseUniverse(lexer)
         raiseError(lexer, "Parse error", "Invalid 'value' argument in universe definition!");
       end
 
-      universe.value.(symbol.name).position = symbol.position;
-      universe.value.(symbol.name).value = symbol.value;
+      universe.values.(symbol.name).position = symbol.position;
+      universe.values.(symbol.name).value = symbol.value;
+
+      %universe.values = [universe.values symbol];
 
       [lexer, token] = getNextToken(lexer);
     end

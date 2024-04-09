@@ -23,8 +23,10 @@ function [lexer, rule] = parseRule(lexer)
         raiseError(lexer, "Parse error", "Invalid keyword in rule definition; only 'use' is accepted!");
       end
 
-    else
+    elseif (strcmp(token.type, "literal"))
       rule.consequent = token.value;
+    else
+      raiseError(lexer, "Parse error", "Invalid consequent in rule definition!");
     end
 
 
