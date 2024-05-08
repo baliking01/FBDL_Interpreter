@@ -2,7 +2,7 @@ function [lexer, rule] = parseRule(lexer)
   rule = struct(
   "variable", "",
   "consequent", "",
-  "predicates", ""
+  "predicates", []
   );
 
   [lexer, token] = getNextToken(lexer);
@@ -62,12 +62,20 @@ function [lexer, rule] = parseRule(lexer)
           raiseError(lexer, "Parse error", "Missing value of predicate in rule definition!");
         end
 
-        if (any(strcmp(rule.predicates, antecedent)))
+        %if (any(strcmp(rule.predicates, antecedent)))
           % Duplicate antecedent in rule
-          raiseError(lexer, "Parse error", "Duplicate antecedent in rule definition!");
+        %  raiseError(lexer, "Parse error", "Duplicate antecedent in rule definition!");
+        %end
+
+        for i = 1:length(rule.predicates)
+          if (strcmp(rule.predicates(i).antecedent, antecedent))
+            raiseError(lexer, "Parse error", "Duplicate antecedent in rule definition!");
+          end
         end
 
-        rule.predicates.(antecedent) = value;
+        t.antecedent = antecedent;
+        t.value = value;
+        rule.predicates = [rule.predicates t];
 
         [lexer, token] = getNextToken(lexer);
         if (strcmp(token.type, "keyword") && (strcmp(token.value, "and") || strcmp(token.value, "end")))

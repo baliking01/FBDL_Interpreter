@@ -13,15 +13,10 @@ function checkRule(name, rule, universes)
 
   % Predicates
   predicates = rule.predicates;
-  len = 0;
-  if !isnull(rule.predicates)
-    len = numfields(predicates);
-  end
-
-  for i = 1:len
-    antecedent = fieldnames(predicates){i};
+  for i = 1:length(predicates)
+    antecedent = predicates(i).antecedent;
     if isfield(universes, antecedent)
-      value = predicates.(antecedent);
+      value = predicates(i).value;
       if !isfield(universes.(antecedent).values, value)
         error("Parse error! Invalid value '%s' for antecedent '%s' in rulebase '%s'!\n", value, antecedent, name);
       end

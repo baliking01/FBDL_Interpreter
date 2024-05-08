@@ -37,7 +37,7 @@ function [lexer, universe] = parseUniverse(lexer)
       end
       [lexer, token] = getNextToken(lexer);
       if (strcmp(token.type, "number"))
-        symbol.value = token.value;
+        symbol.value = str2double(token.value);
         if (isnan(symbol.value))
           raiseError(lexer, "Parse error", "Invalid 'value' argument in universe definition! Number exceeds maximum value!")
         end
