@@ -9,7 +9,7 @@
 % Interpreter main entry point, user callable function
 % "input" is either a string or a path to a file containing content written in FBDL
 % This can be specified with the type parameter, where "s" indicates a string and "f" a file.
-function retval = main(input, type)
+function engine = simulator(input, type)
   retval = 0;
   addpath("lexer");
   addpath("lexer/utils");
@@ -25,11 +25,7 @@ function retval = main(input, type)
     print_usage();
   end
 
-  % parser and lexer
   behavior = parser(content);
-  %behavior
-  %engine
   engine = createEngine(behavior);
   engine = init(engine);
-  engine = step(engine);
 end
