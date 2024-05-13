@@ -18,7 +18,7 @@ function engine = calcRuleDistances(engine)
         distance = calcDistance(universes.(antecedent), symbol, observation);
 
         engine.behavior.rulebases(i).rules(j).distances.(antecedent) = distance;
-        engine.behavior.rulebases(i).rules(j).distances
+        engine.behavior.rulebases(i).rules(j).distances;
         ruleDistance += distance * distance;
       end
 

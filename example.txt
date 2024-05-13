@@ -1,0 +1,22 @@
+universe "distance"
+    "zero" 0 0
+    "close" 1 0.1
+    "far" 5 1
+    "max" 10 1
+end
+
+universe "curiosity"
+    "low" 0 0
+    "high" 1 1
+end
+
+universe "speed" 
+    "low" 0 0
+    "high" 1 100 
+end 
+
+rulebase "speed"
+    rule "high" when "distance" is "far" and "curiosity" is "high" end
+    rule "low" when "distance" is "close" end
+    rule "low" when "curiosity" is "low" end
+end
