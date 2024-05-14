@@ -1,6 +1,6 @@
 function engine = setStates(engine, states)
   in = length(states);
-  curr =  numfields(engine.states);
+  curr =  length(getStates(engine));
   if !isvector(in)
     error("Supplied states must be contained in a vector!\n");
   end

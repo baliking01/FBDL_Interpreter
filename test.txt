@@ -64,13 +64,9 @@ end
 rulebase "interest"
 description "The agent is interested when the target has noise."
     rule "low" when "distance" is "close" end
-    dominates
-       rule "high" when "has_noise" is "true" end
-       rule "high" when "interest" is "high" end
-       dominates
-           rule "low" end
-        end
-    end
+    rule "high" when "has_noise" is "true" end
+    rule "high" when "interest" is "high" end
+    rule "low" end
 end
 
 rulebase "rest_demand"
@@ -84,27 +80,19 @@ end
 rulebase "approach"
 description "Approach when there is a closer interesting target."
     rule "high" when "distance" is "far" end
-    dominates
-        rule "low" end
-    end
+    rule "low" end
 end
 
 rulebase "go_to_rest"
 description "Go to rest position when the target is tired."
     rule "high" when "rest_distance" is "far" end
-    dominates
-        rule "low" end
-    end
+    rule "low" end
 end
 
 rulebase "speed"
 description "The speed fusioned from approach and go_to_rest values."
     rule use "go_to_rest" when "rest_demand" is "high" end
-    dominates
-       rule use "approach" when "interest" is "high" end
-       dominates
-           rule "stop" end
-       end
-    end
+    rule use "approach" when "interest" is "high" end
+    rule "stop" end
 end
 
